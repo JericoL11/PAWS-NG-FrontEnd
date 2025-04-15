@@ -1,1 +1,130 @@
-<p>client works!</p>
+<div class="container">
+    <div class="bg-secondary bg-opacity-10 mb-3 py-2 text-center">
+        <h3 class="fw-bold fs-2">Client Management</h3>
+    </div>    
+    
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-primary rounded-4 mx-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Add New
+        </button>
+        <a routerLink="pet" class="btn btn-warning rounded-4">
+            Pet List
+        </a>
+    </div>
+    <!-- table -->
+        <table class="table mt-3">
+            <thead>
+                <tr class="table-primary text-center">
+                    <th>Client Id</th>
+                    <th>Name</th>
+                    <th>Contact No.</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let owner of Owners">
+                    <td>{{ owner.id }}</td>
+                    <td>{{owner.firstName}} {{owner.lastName}}</td>
+                    <td> 
+                        <ul class="mb-0 ps-3">
+                            <li *ngFor="let contact of owner.contacts">
+                                {{contact.contactNo}}
+                            </li>
+                        </ul>
+                    </td>
+                    <td> <button class="btn btn-warning rounded-4">Click ME</button></td>
+                </tr>
+            </tbody>
+        </table>
+</div>
+
+  <!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <div class="row">
+              <!-- First Name -->
+              <div class="col-md-4 mb-3">
+                <div class="form-floating">
+                  <input type="text" class="form-control" placeholder="First Name">
+                  <label>First Name</label>
+                </div>
+              </div>
+  
+              <!-- Last Name -->
+              <div class="col-md-4 mb-3">
+                <div class="form-floating">
+                  <input type="text" class="form-control" placeholder="Last Name">
+                  <label>Last Name</label>
+                </div>
+              </div>
+  
+              <!-- Middle Name -->
+              <div class="col-md-4 mb-3">
+                <div class="form-floating">
+                  <input type="text" class="form-control" placeholder="Middle Name">
+                  <label>Middle Name</label>
+                </div>
+              </div>
+  
+              <!-- Gender -->
+              <div class="col-md-4 mb-3">
+                <div class="form-floating">
+                  <select class="form-select" aria-label="Select Gender">
+                    <option selected hidden>Select Gender</option>
+                    <option value="0">Male</option>
+                    <option value="1">Female</option>
+                  </select>
+                  <label>Gender</label>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-2">
+                <div class="form-floating">
+                  <input type="date" class="form-control" placeholder="Date of Birth">
+                  <label>Birth Date</label>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-2">
+                <div class="form-floating">
+                  <input type="text" class="form-control" placeholder="Home Address">
+                  <label>Home Address</label>
+                </div>
+              </div>
+
+
+              <div class="col-md-4 mb-2">
+                <div class="form-floating">
+                  <input type="email" class="form-control" placeholder="Home Address">
+                  <label>Email Address</label>
+                </div>
+              </div>
+
+
+              <div class="col-md-4 mb-2">
+                <div class="form-floating">
+                  <input type="text" maxlength="11" class="form-control" placeholder="Contact No.">
+                  <label>Contact No.</label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+  
+        <!-- Modal Footer with Flexbox -->
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

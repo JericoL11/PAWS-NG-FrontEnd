@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { DashboardComponent } from './dashboard.component';
 import { HomeComponent } from './home/home.component';
+import { PetComponent } from './pet/pet.component';
+import { PetservicesComponent } from './petservices/petservices.component';
 import { ClientComponent } from './client/client.component';
 
 const routes: Routes = [
@@ -14,6 +16,12 @@ const routes: Routes = [
     },
     {
       path: 'client', component:ClientComponent  //home
+    },
+    {
+      path: 'pet', component:PetComponent
+    },
+    {
+      path: 'petservice', component:PetservicesComponent
     }
   ]
   }
