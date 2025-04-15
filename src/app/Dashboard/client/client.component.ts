@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../../Shared/client.service';
 import { CommonModule } from '@angular/common';
 import { OwnerDisplayDto } from '../../models/owner';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; // Import FormsModule
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AddUpdateModalComponent } from "./add-update-modal/add-update-modal.component"; // Import FormsModule
 
 @Component({
   selector: 'app-client',
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AddUpdateModalComponent],
   templateUrl: './client.component.html',
   styleUrl: './client.component.css'
 })
@@ -19,45 +20,13 @@ contactNumbers: string[] = [''];
 
 personForm!: FormGroup;
 
-  constructor(public service: ClientService, private fb: FormBuilder) { }
+
+  constructor(public service: ClientService) { }
 
   ngOnInit(): void {
-
-    this.personForm = this.fb.group({
-      firstName: [''],
-      lastName: [''],
-      middleName: [''],
-      gender: [''],
-      birthDate: [''],
-      homeAddress: [''],
-      emailAddress: ['', [Validators.email]],
-      contacts: this.fb.array([this.createContactControl()]) // Initialize with one contact
+    this.service.getOwner().subscribe({
+      next: (data) => (this.Owners = data, console.log(data)),
+      error: (err) => console.log(err),
     });
-  }
-
-  get contacts(): FormArray {
-    return this.personForm.get('contacts') as FormArray;
-  }
-
-  createContactControl(): FormGroup {
-    return this.fb.group({
-      contactNo: ['', [Validators.required, Validators.maxLength(11)]]
-    });
-  }
-
-  addContact(): void {
-    this.contacts.push(this.createContactControl());
-  }
-
-  removeContact(index: number): void {
-    if (this.contacts.length > 1) {
-      this.contacts.removeAt(index);
-    }
-  }
-
-  onSubmit(): void {
-    console.log(this.personForm.value);
   }
 }
-
-  // Method to add additional contact input field

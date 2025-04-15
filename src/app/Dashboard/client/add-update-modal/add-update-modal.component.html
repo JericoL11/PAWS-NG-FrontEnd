@@ -1,0 +1,103 @@
+
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            
+
+        <form [formGroup]="personForm" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <!-- First Name -->
+                        <div class="col-md-4 mb-3">
+                            <div class="form-floating">
+                            <input type="text" formControlName="firstName" class="form-control" placeholder="First Name">
+                            <label>First Name</label>
+                            </div>
+                        </div>
+
+
+                        <!-- Last Name -->
+                    <div class="col-md-4 mb-3">
+                        <div class="form-floating">
+                        <input type="text" formControlName="lastName" class="form-control" placeholder="Last Name">
+                        <label>Last Name</label>
+                        </div>
+                    </div>
+
+                        <!-- Middle Name -->
+                        <div class="col-md-4 mb-3">
+                            <div class="form-floating">
+                            <input type="text" formControlName="middleName" class="form-control" placeholder="Middle Name">
+                            <label>Middle Name</label>
+                            </div>
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="col-md-3 mb-3">
+                            <div class="form-floating">
+                            <select class="form-select" formControlName="gender"  aria-label="Select Gender">
+                                <option selected hidden>Select Gender</option>
+                                <option value="0">Male</option>
+                                <option value="1">Female</option>
+                            </select>
+                            <label>Gender</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-2">
+                            <div class="form-floating">
+                            <input type="date" formControlName="birthDate" class="form-control" placeholder="Date of Birth">
+                            <label>Birth Date</label>
+                            </div>
+                        </div>
+
+                        
+                        <div class="col-md-5 mb-2">
+                            <div class="form-floating">
+                            <input type="email" formControlName="email" class="form-control" placeholder="Home Address">
+                            <label>Email Address</label>
+                            </div>
+                        </div>
+ 
+
+                        <div class="col-md-12 mb-2">
+                            <div class="form-floating">
+                            <input type="text" formControlName="address" class="form-control" placeholder="Home Address">
+                            <label>Home Address</label>
+                            </div>
+                        </div>
+
+                        <div formArrayName="contacts" class="row">
+                            <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class="col-md-6 mb-2">
+                              <div class="input-group">
+                                <div class="form-floating flex-grow-1">
+                                  <input type="text" class="form-control" formControlName="number" maxlength="11" placeholder="###-####-###">
+                                  <label>Contact No. {{ i + 1 }}</label>
+                                </div>
+                                <button type="button" class="btn btn-danger btn-sm ms-2 align-self-center" (click)="removeContact(i)" [disabled]="contacts.length === 1">Remove</button>
+                              </div>
+                            </div>
+                          
+                            <!-- One "Add Contact" Button Below All Contacts -->
+                            <div class="col-md-12 mb-2" *ngIf="contacts.length < 2">
+                              <button type="button" class="btn btn-success" (click)="addContact()">Add Another Contact</button>
+                            </div>
+                          </div>
+                        </div>
+        <!-- Modal Footer -->
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+      
+        </div>
+    </div>
+</div>
+   
