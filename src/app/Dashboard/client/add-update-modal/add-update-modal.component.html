@@ -1,103 +1,192 @@
 
   <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-      <div class="modal-content">
+  <div #addOwnerModal class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Owner</h1>
+          <button type="button" (click)="closeModalReset()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="container">
-            
+            <div class="bg-secondary bg-opacity-10 my-4 py-2 px-3 d-flex justify-content-center">
+              <h5 class="fw-bold">Owner Details</h5>
+              </div>
+                
+        <form [formGroup]="CreateOwnerForm" (ngSubmit)="onSubmit()">
+          <div formGroupName="person">
+            <div class="row">
+                <!-- First Name -->
+                <div class="col-md-4 mb-3">
+                    <div class="form-floating">
+                      <input type="text" formControlName="firstName" class="form-control" placeholder="First Name">
+                      <label>First Name</label>
+                    </div>
+                    <div class="form-text text-danger" *ngIf="hasError(CreateOwnerForm.get('person.firstName'), 'required')">
+                      Required field
+                    </div>
+                </div>
 
-        <form [formGroup]="personForm" (ngSubmit)="onSubmit()">
-                    <div class="row">
-                        <!-- First Name -->
-                        <div class="col-md-4 mb-3">
-                            <div class="form-floating">
-                            <input type="text" formControlName="firstName" class="form-control" placeholder="First Name">
-                            <label>First Name</label>
-                            </div>
+                <!-- Last Name -->
+            <div class="col-md-4 mb-3">
+                <div class="form-floating">
+                  <input type="text" formControlName="lastName" class="form-control" placeholder="Last Name">
+                  <label>Last Name</label>
+                </div>
+
+                <div class="form-text text-danger" *ngIf="hasError(CreateOwnerForm.get('person.lastName'), 'required')">
+                    Required field
+                </div>
+            </div>
+
+                <!-- Middle Name -->
+                <div class="col-md-4 mb-3">
+                    <div class="form-floating">
+                    <input type="text" formControlName="middleName" class="form-control" placeholder="Middle Name">
+                    <label>Middle Name</label>
+                    </div>
+                </div> 
+
+                <!-- Gender -->
+                <div class="col-md-3 mb-3">
+                    <div class="form-floating">
+                    <select class="form-select" formControlName="gender"  aria-label="Select Gender">
+                        <option selected hidden>Select Gender</option>
+                        <option [value]="0">Male</option>
+                        <option [value]="1">Female</option>
+                    </select>
+                    <label>Gender</label>
+                    </div>
+                    <div class="Form-text text-danger" *ngIf="hasError(CreateOwnerForm.get('person.gender'), 'required')">
+                      Required field
+                    </div>  
+                </div>
+
+                <div class="col-md-4 mb-2">
+                    <div class="form-floating">
+                        <input type="date" formControlName="birthDate" class="form-control" placeholder="Date of Birth">
+                        <label>Birth Date</label>
+                    </div>
+                    <div class="form-text text-danger" *ngIf="hasError(CreateOwnerForm.get('person.birthDate'), 'required')">
+                      Required field
+                    </div>
+                </div>
+
+                
+                <div class="col-md-5 mb-2">
+                    <div class="form-floating">
+                    <input type="email" formControlName="email" class="form-control" placeholder="Home Address">
+                    <label>Email Address</label>
+                    </div>
+                    <div class="form-text text-danger" *ngIf="hasError(CreateOwnerForm.get('person.email'), 'email')">
+                      Invalid Email
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-2">
+                    <div class="form-floating">
+                      <input type="text" formControlName="homeAddress" class="form-control" placeholder="Home Address">
+                      <label>Home Address</label>
+                    </div>
+                    <div class="form-text text-danger" *ngIf="hasError(CreateOwnerForm.get('person.homeAddress'), 'required')">
+                      Required field
+                   </div>
+                </div>
+
+                <div formArrayName="contacts" class="row" *ngIf="contacts">
+                  <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class="col-md-6 mb-2">
+                      <div class="input-group">
+                        <div class="form-floating flex-grow-1">
+                          <input type="text" class="form-control" formControlName="phoneNumber" maxlength="11" placeholder="###-####-###">
+                          <label>Contact No. {{ i + 1 }}</label>
                         </div>
-
-
-                        <!-- Last Name -->
-                    <div class="col-md-4 mb-3">
-                        <div class="form-floating">
-                        <input type="text" formControlName="lastName" class="form-control" placeholder="Last Name">
-                        <label>Last Name</label>
-                        </div>
+                        <button type="button" class="btn btn-danger btn-sm ms-2 align-self-center" (click)="removeContact(i)" *ngIf="contacts.length === 2">Remove</button>
+                      </div>
+                      <div class="form-text text-danger" *ngIf="hasFormArrayError(contacts,i, 'phoneNumber', 'required' )">
+                        Required Field
+                      </div>
                     </div>
 
-                        <!-- Middle Name -->
-                        <div class="col-md-4 mb-3">
-                            <div class="form-floating">
-                            <input type="text" formControlName="middleName" class="form-control" placeholder="Middle Name">
-                            <label>Middle Name</label>
-                            </div>
-                        </div>
+                  
+                    <!-- One "Add Contact" Button Below All Contacts -->
+                    <div class="col-md-6 mb-2 d-flex align-items-center" *ngIf="contacts.length < 2">
+                      <button type="button" class="btn btn-success" (click)="addContact()">Add Another Contact</button>
+                    </div>
+                  </div>
+                </div>
+          </div>
+          
+                <!-- petCreate -->
+                <div class="bg-secondary bg-opacity-10 my-4 py-2 px-3 d-flex justify-content-between">
+                  <h5 class="fw-bold">Pet Details</h5>
+                        <button type="button" class="btn btn-success" (click)="addPet()">add</button>
+                  </div>
 
-                        <!-- Gender -->
-                        <div class="col-md-3 mb-3">
-                            <div class="form-floating">
-                            <select class="form-select" formControlName="gender"  aria-label="Select Gender">
-                                <option selected hidden>Select Gender</option>
-                                <option value="0">Male</option>
-                                <option value="1">Female</option>
-                            </select>
-                            <label>Gender</label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 mb-2">
-                            <div class="form-floating">
-                            <input type="date" formControlName="birthDate" class="form-control" placeholder="Date of Birth">
-                            <label>Birth Date</label>
-                            </div>
-                        </div>
-
-                        
-                        <div class="col-md-5 mb-2">
-                            <div class="form-floating">
-                            <input type="email" formControlName="email" class="form-control" placeholder="Home Address">
-                            <label>Email Address</label>
-                            </div>
-                        </div>
- 
-
-                        <div class="col-md-12 mb-2">
-                            <div class="form-floating">
-                            <input type="text" formControlName="address" class="form-control" placeholder="Home Address">
-                            <label>Home Address</label>
-                            </div>
-                        </div>
-
-                        <div formArrayName="contacts" class="row">
-                            <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class="col-md-6 mb-2">
-                              <div class="input-group">
-                                <div class="form-floating flex-grow-1">
-                                  <input type="text" class="form-control" formControlName="number" maxlength="11" placeholder="###-####-###">
-                                  <label>Contact No. {{ i + 1 }}</label>
+                
+                <div *ngIf="pets" formArrayName="pets">
+                  <div *ngFor="let pet of pets.controls; let i = index" [formGroupName]="i" >
+                        <div class="card mx-0 px-0 mb-2">
+                          <div class="card-header">
+                            <h6>Pet {{i + 1}}</h6>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-lg-2 col-md-6 mb-2">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" formControlName="name" placeholder="Pet Name">
+                                  <label>Pet Name</label>
                                 </div>
-                                <button type="button" class="btn btn-danger btn-sm ms-2 align-self-center" (click)="removeContact(i)" [disabled]="contacts.length === 1">Remove</button>
+                              </div>
+                              <div class="col-lg-2 col-md-6 mb-2">
+                                <div class="form-floating">
+                                  <select formControlName="gender" class="form-control">
+                                    <option [value]="" selected hidden>Select Gender</option>
+                                    <option [value]="0">Male</option>
+                                    <option [value]="1">Female</option>
+                                  </select>
+                                  <label>Gender</label>
+                                </div>
+                              </div>
+                              <div class="col-lg-2 col-md-6 mb-2">
+                                <div class="form-floating">
+                                  <select formControlName="specie" class="form-control">
+                                    <option [value]="" selected hidden >Select Specie</option>
+                                    <option [value]="0">Cat</option>
+                                    <option [value]="1">Dog</option>
+                                  </select>
+                                  <label>Specie</label>
+                                </div>
+                             </div>
+                              <div class="col-lg-2 col-md-6 mb-2">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" formControlName="breed" placeholder="Pet Name">
+                                  <label>Breed</label>
+                                </div>
+                              </div>
+      
+                                <div class="col-lg-3 col-md-6 mb-2">
+                                  <div class="form-floating">
+                                    <input type="date" class="form-control" formControlName="birthDate" placeholder="Pet Name">
+                                    <label>Birth Date</label>
+                                  </div>
+                               </div>
+          
+                              <div class="col-sm-1 d-flex align-items-center">
+                                  <button type="button" class="btn btn-danger btn-sm  align-self-center" (click)="removePet(i)" *ngIf="pets.length > 1"><i class="fa-solid fa-trash"></i></button>
                               </div>
                             </div>
-                          
-                            <!-- One "Add Contact" Button Below All Contacts -->
-                            <div class="col-md-12 mb-2" *ngIf="contacts.length < 2">
-                              <button type="button" class="btn btn-success" (click)="addContact()">Add Another Contact</button>
-                            </div>
-                          </div>
-                        </div>
+                         </div>
+                      </div>
+                  </div>
+              </div>
+  
         <!-- Modal Footer -->
             <div class="modal-footer d-flex justify-content-between">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModalReset()">Close</button>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
-      
-        </div>
+          </div>
     </div>
 </div>
    

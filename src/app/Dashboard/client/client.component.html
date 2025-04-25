@@ -29,21 +29,23 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let owner of Owners">
-                    <td>{{ owner.id }}</td>
-                    <td>{{owner.firstName}} {{owner.lastName}}</td>
-                    <td> 
-                        <ul class="mb-0 ps-3">
-                            <li *ngFor="let contact of owner.contacts">
-                                {{contact.contactNo}}
-                            </li>
-                        </ul>
+                <tr *ngFor="let owner of Owners" class="text-center">
+                    <td class="align-middle">{{ owner.id }}</td>
+                    <td class="align-middle">{{ owner.person.fullName }}</td>
+                    <td class="align-middle">
+                      <ul class="mb-0 ps-3 no-bullets">
+                        <li *ngFor="let contact of owner.person.iContacts">
+                          {{ contact.phoneNumber }}
+                        </li>
+                      </ul>
                     </td>
-                    <td> <button class="btn btn-warning rounded-4">Click ME</button></td>
-                </tr>
+                    <td class="align-middle">
+                      <button class="btn btn-warning rounded-4">Click ME</button>
+                    </td>
+                  </tr>
             </tbody>
         </table>
 </div>
 
 
-<app-add-update-modal></app-add-update-modal>
+<app-add-update-modal (ownerCreated)="onOwnerCreated($event)"></app-add-update-modal>

@@ -1,45 +1,96 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { hasError, hasFormArrayError } from '../../../Shared/helpers/form-validations';
+import { ClientService } from '../../../Shared/client.service';
+import { CreateOwner, OwnerDisplay } from '../../../models/owner';
+
+// 👇 Tell TypeScript about Bootstrap
+declare var bootstrap: any;
+
 
 @Component({
   selector: 'app-add-update-modal',
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './add-update-modal.component.html',
-  styleUrl: './add-update-modal.component.css'
+  styleUrls: ['./add-update-modal.component.css']  // Corrected to styleUrls
 })
-export class AddUpdateModalComponent implements OnInit{
+export class AddUpdateModalComponent implements OnInit {
 
-personForm! : FormGroup;
+  @Output() ownerCreated = new EventEmitter<OwnerDisplay>(); // Emit OwnerDisplay when created
+  @ViewChild('addOwnerModal', { static: false }) modalRef!: ElementRef;
 
-constructor( private fb:FormBuilder ){}
+  // Helper functions
+  hasError = hasError;
+  hasFormArrayError = hasFormArrayError;
 
+  CreateOwnerForm!: FormGroup;
+
+  constructor(public service: ClientService, private fb: FormBuilder) {}
+
+  closeModal() {
+    const modal = bootstrap.Modal.getInstance(this.modalRef.nativeElement);
+    if (modal) {
+      modal.hide(); // ✅ Close the modal
+    }
+  }
+  
+  
   ngOnInit(): void {
-    this.personForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['',Validators.required],
-      middleName: [''],
-      email: ['', Validators.email],
-      gender: [''],
-      address: [''],
-      birthDate: [''],
-
-      // 💡 Contacts as a dynamic array
-      contacts: this.fb.array([this.createContact()])
-    })
+    this.initializeFromAddEdit();
   }
 
-   // 🧱 Create one contact field (like a contact row)
-  createContact(): FormGroup{
-    return this.fb.group({
-      number: ['', [Validators.required, Validators.maxLength(11)]]
+  initializeFromAddEdit() {
+    this.CreateOwnerForm = this.fb.group({
+      person: this.fb.group({
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        middleName: [''],
+        email: ['', Validators.email],
+        gender: [null, Validators.required],
+        birthDate: [null, Validators.required],
+        homeAddress: ['', Validators.required],
+        contacts: this.fb.array([this.createContact()])
+      }),
+      pets: this.fb.array([this.createPets()])
     });
   }
 
+  // 🧱 Create one contact field (like a contact row)
+  createContact(): FormGroup {
+    return this.fb.group({
+      phoneNumber: ['', [Validators.required, Validators.maxLength(11)]]
+    });
+  }
+
+  createPets(): FormGroup {
+    return this.fb.group({
+      name: ['', [Validators.required]],
+      birthDate: ['', Validators.required],
+      breed: ['', Validators.required],
+      gender: [null, Validators.required],
+      specie: [null, Validators.required]
+    });
+  }
 
   // Accessor for the array (used in HTML)
-  get contacts(): FormArray{
-    return this.personForm.get('contacts') as FormArray;
+  get contacts(): FormArray {
+    return this.CreateOwnerForm.get('person.contacts') as FormArray;
+  }
+
+  get pets(): FormArray {
+    return this.CreateOwnerForm.get('pets') as FormArray;
+  }
+
+  // ➕ Add another contact input
+  addContact(): void {
+    if (this.contacts.length < 3) {
+      this.contacts.push(this.createContact());
+    }
+  }
+
+  addPet(): void {
+    this.pets.push(this.createPets());
   }
 
   // ❌ Remove contact at a specific index
@@ -49,17 +100,47 @@ constructor( private fb:FormBuilder ){}
     }
   }
 
- // ➕ Add another contact input
- addContact(): void {
-  if(this.contacts.length < 3){
-    this.contacts.push(this.createContact());
+  removePet(index: number): void {
+    if (this.pets.length > 1) {
+      this.pets.removeAt(index);
+    }
   }
+
+  closeModalReset() {
+    this.CreateOwnerForm.reset();
+    while (this.contacts.length > 1) {
+      this.contacts.removeAt(1);
+    }
+    while (this.pets.length > 1) {
+      this.pets.removeAt(1);
+    }
+  }
+
   
-}
 
-  // 🚀 Submit form (e.g., send to API)
   onSubmit(): void {
-    console.log(this.personForm.value); // This contains contacts[] as array
+    if (this.CreateOwnerForm.invalid) {
+      this.CreateOwnerForm.markAllAsTouched();
+      return;
+    }
+
+    const payload = this.CreateOwnerForm.getRawValue();
+    payload.person.gender = Number(payload.person.gender);
+    payload.pets.forEach((pet: any) => {
+      pet.gender = Number(pet.gender);
+      pet.specie = Number(pet.specie);
+    });
+
+    this.service.postOwner(payload).subscribe({
+      next: (res: OwnerDisplay) => {
+        alert('Owner added!');
+        this.closeModal(); // 👈 Close modal on success
+        this.ownerCreated.emit(res);
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Something went wrong');
+      }
+    });
   }
 }
-

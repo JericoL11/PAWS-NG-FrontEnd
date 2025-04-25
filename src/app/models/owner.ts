@@ -1,14 +1,28 @@
-export interface ContactDto {
-    id: number;
-    contactNo: string;
+import { ContactDisplay } from "./contact";
+import { PersonCreate, PersonDisplay } from "./person";
+import { PetCreate } from "./pet";
+
+//display
+  export interface OwnerDisplay{
+    id: Number;
+    person: PersonDisplay,
   }
   
-  export interface OwnerDisplayDto {
+  //create
+  export interface CreateOwner {
+    person: PersonCreate,
+    pets: PetCreate[]
+  }
+  
+  //edit
+  export interface SelectedOwner {
     id: number;
     firstName: string;
     lastName: string;
     middleName: string;
     address: string;
     email: string;
-    contacts: ContactDto[];
+    contacts: ContactDisplay[];
+    iPet: PetCreate[];
   }
+  

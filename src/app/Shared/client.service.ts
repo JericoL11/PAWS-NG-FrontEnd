@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { OwnerDisplayDto } from '../models/owner';
+import { CreateOwner, OwnerDisplay } from '../models/owner';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,13 +9,17 @@ import { Observable } from 'rxjs';
 })
 export class ClientService {
   
-  ListOwner: OwnerDisplayDto[] = [];
 
   apiUrl = `${environment.apiBaseUrl}/Owners`;
 
   constructor(private http:HttpClient) { }
 
-  getOwner(): Observable<OwnerDisplayDto[]>{
-    return this.http.get<OwnerDisplayDto[]>(this.apiUrl);
+  getOwner(): Observable<OwnerDisplay[]>{
+    return this.http.get<OwnerDisplay[]>(this.apiUrl);
   }
+
+  postOwner( data : CreateOwner): Observable<OwnerDisplay>{
+    return this.http.post<OwnerDisplay>(this.apiUrl, data );
+  }
+
 }
