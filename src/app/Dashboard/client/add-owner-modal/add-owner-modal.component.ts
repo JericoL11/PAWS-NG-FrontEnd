@@ -1,22 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { OwnerDisplay } from '../../../models/owner';
 import { hasError, hasFormArrayError } from '../../../Shared/helpers/form-validations';
 import { ClientService } from '../../../Shared/client.service';
-import { CreateOwner, OwnerDisplay } from '../../../models/owner';
 
 // 👇 Tell TypeScript about Bootstrap
 declare var bootstrap: any;
 
-
 @Component({
-  selector: 'app-add-update-modal',
+  selector: 'app-add-owner-modal',
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './add-update-modal.component.html',
-  styleUrls: ['./add-update-modal.component.css']  // Corrected to styleUrls
+  templateUrl: './add-owner-modal.component.html',
+  styleUrl: './add-owner-modal.component.css'
 })
-export class AddUpdateModalComponent implements OnInit {
-
+export class AddOwnerModalComponent {
   @Output() ownerCreated = new EventEmitter<OwnerDisplay>(); // Emit OwnerDisplay when created
   @ViewChild('addOwnerModal', { static: false }) modalRef!: ElementRef;
 

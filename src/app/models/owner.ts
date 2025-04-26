@@ -2,7 +2,7 @@ import { ContactDisplay } from "./contact";
 import { PersonCreate, PersonDisplay } from "./person";
 import { PetCreate } from "./pet";
 
-//display
+
   export interface OwnerDisplay{
     id: Number;
     person: PersonDisplay,
