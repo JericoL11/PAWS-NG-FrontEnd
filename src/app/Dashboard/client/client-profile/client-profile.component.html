@@ -1,0 +1,58 @@
+<div class="container my-4">
+    <!-- Header -->
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-primary">Client Profile</h2>
+      <p class="text-muted">Detailed information about the client and their pets</p>
+    </div>
+  
+    <!-- Owner Card -->
+    <div class="card shadow-sm rounded-4 mb-4 border-0">
+      <div class="card-body">
+        <h5 class="card-title fw-semibold mb-3">Owner Information</h5>
+        <div class="row justify-content-around mb-2">
+          <div class="col-md-3">
+            <strong>Full Name:</strong> {{owner?.person?.fullName}}
+          </div>
+          <div class="col-md-3">
+            <strong>Email:</strong> {{ owner?.person?.email}}
+          </div>
+          <div class="col-md-3">
+            <strong>Home Address:</strong> {{owner?.person?.homeAddress}}
+          </div>
+          <div class="col-md-3">
+            <strong>Contact # :</strong> {{ contactNumbers }}
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Pets Card -->
+    <div class="card shadow-sm rounded-4 border-0">
+      <div class="card-body">
+        <h5 class="card-title fw-semibold mb-3">Registered Pets</h5>
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Name</th>
+                <th>Breed</th>
+                <th>Birth Date</th>
+                <th>Gender</th>
+                <th>Specie</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let pet of owner?.pets">
+                <td>{{pet.name}}</td>
+                <td>{{pet.breed}}</td>
+                <td>{{pet.birthDate | date: 'longDate'}}</td>
+                <td>{{pet.gender | gender}}</td>
+                <td>{{pet.specie | specie}}</td>
+              <tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

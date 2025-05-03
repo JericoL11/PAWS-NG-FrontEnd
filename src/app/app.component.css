@@ -1,0 +1,6 @@
+/* app.component.css */
+/* Apply deep styles to all tables globally, including deeply nested components */
+::ng-deep table td, ::ng-deep table th {
+    text-align: center !important;   /* Horizontally center */
+    vertical-align: middle !important; /* Vertically center */
+  }

@@ -15,7 +15,9 @@ const routes: Routes = [
       path: '', component:HomeComponent  //landing
     },
     {
-      path: 'client', component:ClientComponent  //home
+      //nested lazy loading
+      path: 'client',
+      loadChildren: () => import('./client/client.module').then(m => m.ClientModule)
     },
     {
       path: 'pet', component:PetComponent

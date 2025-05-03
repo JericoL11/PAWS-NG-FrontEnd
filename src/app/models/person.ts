@@ -1,5 +1,6 @@
 import { ContactDisplay ,ContactCreate } from "./contact"
-import { PetCreate } from "./pet"
+import { Gender } from "./enums"
+
 
 export interface PersonDisplay{
     fullName: string
@@ -15,7 +16,7 @@ export interface PersonCreate{
     firstName: string,
     lastName: string,
     middleName: string,
-    gender: number,
+    gender: Gender,
     birthDate: Date,
     email: string,
     homeAddress: string,

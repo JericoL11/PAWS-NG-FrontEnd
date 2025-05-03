@@ -1,0 +1,103 @@
+<div class="container">
+  <div class="bg-secondary bg-opacity-10 mb-3 py-2 text-center">
+    <h3 class="fw-bold fs-2">Client Management</h3>
+  </div>
+
+  <!-- Search and Action Buttons -->
+  <div class="d-flex justify-content-between align-items-center my-4">
+    <div class="form-floating w-50">
+      <input 
+        type="text" 
+        placeholder="Search..." 
+        class="form-control rounded-4 border-2" 
+        [(ngModel)]="searchText" 
+        (input)="onSearch()"
+      >
+      <label>Search Client</label>
+    </div>
+
+    <div>
+      <button class="btn btn-primary rounded-4 mx-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Add New
+      </button>
+      <a routerLink="pet" class="btn btn-warning rounded-4">
+        Pet List
+      </a>
+    </div>
+  </div>
+
+  <!-- Fixed height wrapper with scrollable table -->
+  <div class="d-flex flex-column justify-content-between rounded-4 border border-2" style="height: 500px;">
+    <!-- Scrollable table with responsive wrapper -->
+    <div class="table-responsive" style="overflow-y: auto;">
+      <table class="table table-hover table-bordered mb-0">
+        <thead class="table-primary sticky-top">
+          <tr>
+            <th>Client Id</th>
+            <th>Name</th>
+            <th>Contact No.</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let owner of Owners">
+            <td>{{ owner.id }}</td>
+            <td>{{ owner.person.fullName }}</td>
+            <td>
+              <ul class="mb-0 ps-3 no-bullets">
+                <li *ngFor="let contact of owner.person.iContacts">
+                  {{ contact.phoneNumber }}
+                </li>
+              </ul>
+            </td>
+            <td>
+              <button class="btn btn-warning rounded-4" (click)="viewProfile(owner.id)">
+                  View
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer Pagination -->
+    <div class="mt-3">
+      <nav>
+        <ul class="pagination justify-content-center align-items-center mb-2">
+          <li class="page-item" [class.disabled]="!hasPreviousPage">
+            <button class="page-link" (click)="goToPreviousPage()" [disabled]="!hasPreviousPage">Previous</button>
+          </li>
+
+          <li class="page-item active">
+            <span class="page-link">{{ pageNumber }}</span>
+          </li>
+
+          <li class="page-item" [class.disabled]="!hasNextPage">
+            <button class="page-link" (click)="goToNextPage()" [disabled]="!hasNextPage">
+              Next
+            </button>
+          </li>
+
+          <li class="page-item ms-3">
+            <div class="d-flex align-items-center">
+              <label class="me-2">Page Size:</label>
+              <select class="form-select w-auto rounded-4" (change)="changePageSize($event)">
+                <option [value]="5">5</option>
+                <option [value]="10">10</option>
+                <option [value]="50">50</option>
+                <option [value]="100">100</option>
+              </select>
+            </div>
+            <div class="text-center mt-2">
+              <small>Page {{ pageNumber }} of {{ totalPages }}</small>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Add Owner Modal Component -->
+<app-add-owner-modal (ownerCreated)="onOwnerCreated($event)"></app-add-owner-modal>
